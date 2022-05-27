@@ -481,6 +481,109 @@ class Solution {
 		return numOfDif;
 	}
 
+	public int countWords(String[] words1, String[] words2) {
+		HashMap<String, Integer> dog = new HashMap<>();
+		HashMap<String, Integer> cat = new HashMap<>();
+		int twoCount = 0;
+		for (String word : words1) {
+			if (dog.containsKey(word)) {
+				int temp = dog.get(word);
+				dog.replace(word,temp+1);
+			} else {
+				dog.put(word, 1);
+			}
+		}
+		for(String word: words2){
+			if (cat.containsKey(word)) {
+				int temp = cat.get(word);
+				cat.replace(word,temp+1);
+			} else {
+				cat.put(word, 1);
+			}
+		}
+		for (Map.Entry<String,Integer> entry :dog.entrySet()) {
+			if(entry.getValue()==1&&cat.containsKey(entry.getKey())&&cat.get(entry.getKey())==1)
+				twoCount++;
+		}
+		return twoCount;
+	}
+
+	public int[] intersection(int[] nums1, int[] nums2) {
+		Set<Integer> dog = new HashSet<>();
+		Set<Integer> cat = new HashSet<>();
+
+		for (int num: nums1) {
+			dog.add(num);
+		}
+		for(int num: nums2){
+			if(dog.contains(num))
+				cat.add(num);
+		}
+		int[] ts = new int[cat.size()];
+		int i = 0;
+		for (int elem: cat) {
+			ts[i] = elem;
+			i++;
+		}
+		return ts;
+	}
+
+	public int[] intersect(int[] nums1, int[] nums2) {
+		HashMap<Integer, Integer> nums1Track = new HashMap<>();
+		HashMap<Integer, Integer> nums2Track = new HashMap<>();
+		ArrayList<Integer> endResult = new ArrayList<>();
+		for (int word : nums1) {
+			if (nums1Track.containsKey(word)) {
+				int temp = nums1Track.get(word);
+				nums1Track.replace(word,temp+1);
+			} else {
+				nums1Track.put(word, 1);
+			}
+		}
+		for(int word: nums2){
+			if (nums2Track.containsKey(word)) {
+				int temp = nums2Track.get(word);
+				nums2Track.replace(word,temp+1);
+			} else {
+				nums2Track.put(word, 1);
+			}
+		}
+		for (Map.Entry<Integer,Integer> entry :nums1Track.entrySet()) {
+			if(nums2Track.containsKey(entry.getKey()))
+				for(int i = 0; i < Math.min(entry.getValue(),nums2Track.get(entry.getKey()));i++){
+					endResult.add(entry.getKey());
+				}
+		}
+		int[] rv = new int[endResult.size()];
+		for (int i = 0; i < rv.length; i++) {
+			rv[i] = endResult.get(i);
+		}
+		return rv;
+	}
+
+	public int numberOfSteps(int num) {
+		if(num==0)
+			return 0;
+		if((num&1)==0)
+			return 1+numberOfSteps(num/2);
+		else
+			return 1+numberOfSteps(num-1);
+	}
+
+	public int countOperations(int num1, int num2) {
+		int steps = 0;
+		while(num1!=0&&num2!=0){
+			if(num1<num2){
+				num2 = num2 - num1;
+			}else{
+				num1 = num1 - num2;
+			}
+			steps++;
+		}
+		return steps;
+	}
+
+
 	public static void main(String[] args) {
 		Solution dog = new Solution();
 		String[] temp = {"1", "0001", "111001"};
