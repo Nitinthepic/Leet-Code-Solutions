@@ -652,7 +652,7 @@ class Solution {
             this.next = next;
         }
 
-        ListNode(int val){
+        ListNode(int val) {
             this.val = val;
         }
     }
@@ -730,29 +730,29 @@ class Solution {
             } else {
                 return x * myPow(x, n - 1);
             }
-        }else {
+        } else {
             if (n % 2 == 0) {
-                return 1/(myPow((x * x), -n / 2));
+                return 1 / (myPow((x * x), -(n / 2)));
             } else {
-                return 1/(x * myPow(x, -n - 1));
+                return 1 / (x * myPow(x, -(n + 1)));
             }
         }
     }
 
     public ListNode mergeTwoListsRecursive(ListNode list1, ListNode list2) {
-        if (list1==null&&list2==null)
+        if (list1 == null && list2 == null)
             return null;
-        if(list1==null)
+        if (list1 == null)
             return list2;
-        if(list2==null)
+        if (list2 == null)
             return list1;
-        if(list1.val<list2.val){
+        if (list1.val < list2.val) {
             ListNode list1next = list1.next;
-            list1.next=mergeTwoListsRecursive(list1next,list2);
+            list1.next = mergeTwoListsRecursive(list1next, list2);
             return list1;
-        }else{
+        } else {
             ListNode list2next = list2.next;
-            list2.next=mergeTwoListsRecursive(list1,list2next);
+            list2.next = mergeTwoListsRecursive(list1, list2next);
             return list2;
         }
     }
@@ -762,15 +762,15 @@ class Solution {
         ListNode end = head;
         ListNode count1 = list1;
         ListNode count2 = list2;
-        if(count1 != null && count2 != null){
-            if(count1.val <= count2.val){
+        if (count1 != null && count2 != null) {
+            if (count1.val <= count2.val) {
                 ListNode tempCount1 = count1.next;
 
                 end.next = count1;
                 end = end.next;
                 count1 = tempCount1;
 
-            }else if (count1.val > count2.val){
+            } else if (count1.val > count2.val) {
                 ListNode tempCount2 = count2.next;
 
                 end.next = count2;
@@ -779,15 +779,15 @@ class Solution {
 
             }
         }
-        while(count1!=null && count2 != null){
-            if(count1.val <= count2.val){
+        while (count1 != null && count2 != null) {
+            if (count1.val <= count2.val) {
                 ListNode tempCount1 = count1.next;
 
                 end.next = count1;
                 end = end.next;
                 count1 = tempCount1;
 
-            }else if (count1.val > count2.val){
+            } else if (count1.val > count2.val) {
                 ListNode tempCount2 = count2.next;
 
                 end.next = count2;
@@ -797,7 +797,7 @@ class Solution {
             }
         }
 
-        while(count1!=null){
+        while (count1 != null) {
             ListNode tempCount1 = count1.next;
 
             end.next = count1;
@@ -805,7 +805,7 @@ class Solution {
             count1 = tempCount1;
 
         }
-        while(count2!=null){
+        while (count2 != null) {
             ListNode tempCount2 = count2.next;
 
             end.next = count2;
@@ -816,12 +816,96 @@ class Solution {
         return head.next;
     }
 
+    HashMap<Integer, Integer> tribonacciPrevValues = new HashMap<>();
+
+    public int tribonacci(int n) {
+        if (tribonacciPrevValues.containsKey(n)) {
+            return tribonacciPrevValues.get(n);
+        }
+        if (n == 0) {
+            tribonacciPrevValues.put(n, 0);
+            return 0;
+        }
+        if (n == 1) {
+            tribonacciPrevValues.put(n, 1);
+            return 1;
+        }
+        if (n == 2) {
+            tribonacciPrevValues.put(n, 1);
+            return 1;
+        }
+        tribonacciPrevValues.put(n, tribonacci(n - 3) + tribonacci(n - 2) + tribonacci(n - 1));
+        return tribonacciPrevValues.get(n);
+    }
+
+    public int divideRecursion(int dividend, int divisor) {
+        if (dividend == 0) {
+            return 0;
+        }
+        if (divisor == 1)
+            return dividend;
+
+        if (dividend >= divisor && !(divisor < 0)) {
+            return 1 + divideRecursion(dividend - divisor, divisor);
+        } else if ((dividend < 0 && divisor < 0) && dividend <= divisor) {
+            return 1 + divideRecursion(dividend - divisor, divisor);
+        } else if ((dividend < 0 && divisor > 0) && dividend <= -divisor) {
+            return -1 + divideRecursion(dividend + divisor, divisor);
+        } else if ((dividend > 0 && divisor < 0) && -dividend <= divisor) {
+            return -1 + divideRecursion(dividend + divisor, divisor);
+        }
+        return 0;
+    }
+
+    public int divide(int dividend, int divisor) {
+        if (dividend == Integer.MIN_VALUE && divisor == -1)
+            return Integer.MAX_VALUE;
+        boolean negative = (dividend < 0) ^ (divisor < 0);
+        dividend = Math.abs(dividend);
+        divisor = Math.abs(divisor);
+        int result = 0;
+        int doublingFactor = 0;
+        while (dividend - divisor >= 0) {
+            for (doublingFactor = 0; dividend - (divisor << doublingFactor << 1) >= 0; doublingFactor++) ;
+            result += 1 << doublingFactor;
+            dividend -= divisor << doublingFactor;
+
+        }
+        if (negative)
+            return -result;
+        return result;
+    }
+
+    public int search(int[] nums, int target) {
+        int low = 0;
+        int high = nums.length-1;
+        while(low<=high){
+            int mid = low+(high-low)/2;
+            if(nums[mid]==target)
+                return mid;
+            int curVal = nums[mid];
+            if(nums[mid]<nums[0]!=target<nums[0]){
+                if(nums[mid]<target)
+                    curVal = Integer.MAX_VALUE;
+                else
+                    curVal = Integer.MIN_VALUE;
+            }
+            if(curVal<target){
+                low = mid +1;
+            }else{
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
+
+
     public static void main(String[] args) {
 
         Solution dog = new Solution();
         String[] temp = {"1", "0001", "111001"};
         int[][] mouse = {{1, 3}, {3, 5}, {6, 7}, {6, 8}, {8, 4}, {9, 5}};
-        System.out.println(dog.myPow(2, -2147483648));
+        System.out.println(dog.divide(10, 3));
 
     }
 }
