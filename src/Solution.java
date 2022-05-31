@@ -899,6 +899,18 @@ class Solution {
         return -1;
     }
 
+    public boolean hasAllCodes(String s, int k) {
+        HashSet<String> substrings = new HashSet<>();
+        for(int i = 0; i < s.length(); i++){
+            for(int j = i+1; i <= s.length(); j++){
+                substrings.add(s.substring(i,j));
+            }
+        }
+        if(substrings.size()==Math.pow(2,k))
+            return true;
+        return false;
+    }
+
 
     public static void main(String[] args) {
 
