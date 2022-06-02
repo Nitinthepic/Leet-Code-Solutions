@@ -911,13 +911,22 @@ class Solution {
         return false;
     }
 
+    public int[][] transpose(int[][] matrix) {
+        int[][] transposedMatrix = new int[matrix[0].length][matrix.length];
+        for(int i = 0; i < matrix.length; i++){
+            for (int j = 0; j < matrix[i].length; j++){
+                transposedMatrix[j][i] = matrix[i][j];
+            }
+        }
+        return transposedMatrix;
+    }
 
     public static void main(String[] args) {
 
         Solution dog = new Solution();
         String[] temp = {"1", "0001", "111001"};
-        int[][] mouse = {{1, 3}, {3, 5}, {6, 7}, {6, 8}, {8, 4}, {9, 5}};
-        System.out.println(dog.divide(10, 3));
+        int[][] mouse = {{1,2,3},{4,5,6}};
+        System.out.println(Arrays.deepToString(dog.transpose(mouse)));
 
     }
 }
