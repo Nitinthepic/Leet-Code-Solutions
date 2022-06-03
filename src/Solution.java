@@ -921,12 +921,105 @@ class Solution {
         return transposedMatrix;
     }
 
+    class TimeMap {
+        HashMap<String, HashMap<Integer, String>> currentMap;
+
+        public TimeMap() {
+            this.currentMap = new HashMap<>();
+        }
+
+        public void set(String key, String value, int timestamp) {
+            if (currentMap.containsKey(key)) {
+                currentMap.get(key).put(timestamp, value);
+            } else {
+                currentMap.put(key, new HashMap<>());
+                currentMap.get(key).put(timestamp, value);
+            }
+        }
+
+        public String get(String key, int timestamp) {
+            if (currentMap.containsKey(key)) {
+                System.out.println("true");
+                for (int j = timestamp; j >= 0; j--) {
+                    if (currentMap.get(key).containsKey(j)) {
+                        System.out.println(currentMap.get(key).get(j));
+                        return currentMap.get(key).get(j);
+                    }
+                }
+                return "";
+            }
+            return "";
+        }
+    }
+
+    public int titleToNumber(String columnTitle) {
+        int returnValue = 0;
+        int multiplyFactor = 1;
+        for (int i = columnTitle.length()-1; i >=0 ; i--) {
+            returnValue += ((int)columnTitle.toCharArray()[i]-64)*(multiplyFactor);
+            multiplyFactor = multiplyFactor*26;
+        }
+        return returnValue;
+    }
+
+    public void rotate(int[] nums, int k) {
+        k=k%nums.length;
+        if(k==0)
+            return;
+        flip(nums,0,k);
+        flip(nums,k+1,nums.length-1);
+        int start = k -1;
+        int end = k +1;
+        while((start >= 0)&&(end<=nums.length-1)){
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start--;
+            end++;
+        }
+        if(start<0){
+            flip(nums,end,nums.length-1);
+        }else if(end>=nums.length){
+            flip(nums,0,start);
+        }
+    }
+
+    private void flip(int[] nums, int start, int end){
+        while(start<end){
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
+        }
+    }
+
+    class NumMatrix {
+
+        int[][] sumToIJ;
+        public NumMatrix(int[][] matrix) {
+            this.sumToIJ = new int[matrix.length+1][matrix[0].length+1];
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[j].length; j++) {
+                    this.sumToIJ[i+1][j+1] = sumToIJ[i][j+1]+sumToIJ[i+1][j]+matrix[i][j]-sumToIJ[i][j];
+                }
+            }
+        }
+
+        public int sumRegion(int row1, int col1, int row2, int col2) {
+            return sumToIJ[row2+1][col2+1] - sumToIJ[row2+1][col1]-sumToIJ[row1][col2+1]+sumToIJ[row1][col1];
+        }
+    }
     public static void main(String[] args) {
 
         Solution dog = new Solution();
         String[] temp = {"1", "0001", "111001"};
         int[][] mouse = {{1,2,3},{4,5,6}};
-        System.out.println(Arrays.deepToString(dog.transpose(mouse)));
+        int[] tempArray  = {1,2,3,4,5,6,7};
+        dog.titleToNumber("A");
+        dog.rotate(tempArray,2);
+        System.out.println(Arrays.toString(tempArray));
+
 
     }
 }
