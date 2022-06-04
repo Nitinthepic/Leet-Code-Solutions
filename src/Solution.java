@@ -585,13 +585,10 @@ class Solution {
 
     public int missingNumber(int[] nums) {
         int sumOfArray = (nums.length * (nums.length + 1)) / 2;
-        boolean isZero;
         for (int elem : nums) {
             sumOfArray -= elem;
         }
-        if (sumOfArray != 0)
-            return sumOfArray;
-        else return 0;
+        return sumOfArray;
     }
 
     public List<Integer> getRow(int rowIndex) {
@@ -614,7 +611,7 @@ class Solution {
         return returnList;
     }
 
-    class TreeNode {
+    static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
@@ -643,7 +640,7 @@ class Solution {
         return searchBST(root.right, val);
     }
 
-    public class ListNode {
+    static class ListNode {
         int val;
         ListNode next;
 
@@ -1010,6 +1007,71 @@ class Solution {
             return sumToIJ[row2+1][col2+1] - sumToIJ[row2+1][col1]-sumToIJ[row1][col2+1]+sumToIJ[row1][col1];
         }
     }
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> rv = new ArrayList<>();
+        char[][] board = new char[n][n];
+        //set all values to .
+        for (char[] rows: board) {
+            for(int i = 0; i < n; i++){
+                rows[i] = '.';
+            }
+        }
+        DepthFirstRecursion(0,board,rv);
+        return rv;
+    }
+
+    private boolean validSpot(int row, int column, char[][] board){
+        //check column
+        for (char[] chars : board) {
+            if (chars[column] == 'Q')
+                return false;
+        }
+        //check upper left diagonals
+        int i = row;
+        int j = column;
+        while(i>=0&&j>=0){
+            if(board[i][j]=='Q')
+                return false;
+            i--;
+            j--;
+        }
+        //check upper right diagonals
+        i = row;
+        j = column;
+        while(i>=0&&j<board.length){
+            if(board[i][j]=='Q')
+                return false;
+            i--;
+            j++;
+        }
+        return true;
+    }
+    private void DepthFirstRecursion(int row, char[][] board,List<List<String>> rv){
+        //Base Case: finished all rows
+        if(row==board.length) {
+            List<String> validBoard = new ArrayList<>();
+            //loop through each row of the valid Board and convert to string, add to our List
+            for (char[] currentRow:board) {
+                String currLine = String.valueOf(currentRow);
+                validBoard.add(currLine);
+            }
+            //add to our List of valid solutions
+            rv.add(validBoard);
+            return;
+        }
+        //check each spot of a row
+        for(int column = 0; column < board.length; column++){
+            if(validSpot(row, column,board)){
+                board[row][column] = 'Q';
+                DepthFirstRecursion(row+1,board,rv);
+                //this only runs after inserting valid solution, reset up the stack call and check next column
+                board[row][column] = '.';
+            }
+        }
+    }
+
+
+
     public static void main(String[] args) {
 
         Solution dog = new Solution();
@@ -1019,7 +1081,5 @@ class Solution {
         dog.titleToNumber("A");
         dog.rotate(tempArray,2);
         System.out.println(Arrays.toString(tempArray));
-
-
     }
 }
