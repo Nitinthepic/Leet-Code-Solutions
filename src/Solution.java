@@ -1069,17 +1069,60 @@ class Solution {
             }
         }
     }
+    int maxGold = 0;
+    public int getMaximumGold(int[][] grid) {
+        maxGold = 0;
+        for(int row = 0; row<grid.length; row++){
+            for(int column = 0; column < grid[0].length;column++){
+                if(grid[row][column]!=0)
+                    goldDepth(grid,row,column,0);
+            }
+        }
+        return maxGold;
+    }
 
+    private void goldDepth(int[][] grid, int row, int column, int currentPathValue){
+        if(row<0 || column <0 || row>=grid.length || column >= grid[0].length||grid[row][column]==0){
+            maxGold = Math.max(maxGold,currentPathValue);
+            return;
+        }
+        int currentPos = grid[row][column];
+        grid[row][column] = 0;
+        goldDepth(grid,row-1,column,currentPathValue+currentPos);
+        goldDepth(grid,row+1,column,currentPathValue+currentPos);
+        goldDepth(grid,row,column-1,currentPathValue+currentPos);
+        goldDepth(grid,row,column+1,currentPathValue+currentPos);
+        grid[row][column] = currentPos;
+    }
 
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int currentLocation = m+n-1;
+        while (m!=0&&n!=0){
+            if(nums1[m-1]>=nums2[n-1]){
+                nums1[currentLocation] = nums1[m-1];
+                m--;
+                currentLocation--;
+            }else{
+                nums1[currentLocation] = nums2[n-1];
+                currentLocation--;
+                n--;
+            }
+        }
+        while(n!=0){
+            nums1[currentLocation] = nums2[n-1];
+            n--;
+            currentLocation--;
+        }
+    }
 
     public static void main(String[] args) {
 
         Solution dog = new Solution();
         String[] temp = {"1", "0001", "111001"};
         int[][] mouse = {{1,2,3},{4,5,6}};
-        int[] tempArray  = {1,2,3,4,5,6,7};
-        dog.titleToNumber("A");
-        dog.rotate(tempArray,2);
+        int[] tempArray  = {4,5,6,0,0,0};
+        int[] meow = {1,2,3};
+        dog.merge(tempArray,3,meow,3);
         System.out.println(Arrays.toString(tempArray));
     }
 }
